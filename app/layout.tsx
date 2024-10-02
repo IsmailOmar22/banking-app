@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   title: "Horizon Bank",
   description: "Horizon Bank is a community bank that offers personal and business banking services for everyone.",
   icons: {
-    icon: './icons/logo.svg',
+    icon: '/icons/logo.svg',
   }
 };
 
