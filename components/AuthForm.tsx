@@ -25,6 +25,7 @@ import SignUp from '@/app/(auth)/sign-up/page';
 import { PassThrough } from 'stream';
 import { useRouter } from 'next/navigation';
 import { getLoggedInUser, signIn, signUp } from '@/lib/actions/user.actions';
+import PlaidLink from './PlaidLink';
 
 const AuthForm = ({ type }: { type: string }) => {
 
@@ -53,7 +54,20 @@ const AuthForm = ({ type }: { type: string }) => {
             // Sign up with Appwrite & create plaid link token
 
             if(type === 'sign-up'){
-                const newUser = await signUp(data);
+                const userData = {
+                    firstName: data.firstName!,
+                    lastName: data.lastName!,
+                    address1: data.address1!,
+                    city: data.city!,
+                    state: data.state!,
+                    postalCode: data.postalCode!,
+                    dateOfBirth: data.dateOfBirth!,
+                    ssn: data.ssn!,
+                    email: data.email,
+                    password: data.password
+                }
+
+                const newUser = await signUp(userData);
 
                 setUser(newUser);
             }
@@ -96,9 +110,11 @@ const AuthForm = ({ type }: { type: string }) => {
             </h1>
         </div>
       </header>
-      {user ? (<div className='flex flex-col gap-4'>
-        {/* PlaidLink */}
-      </div>): 
+      {user ? (
+      <div className='flex flex-col gap-4'>
+        <PlaidLink user={user} variant='primary'/>
+      </div>
+      ): (
       <>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -112,7 +128,7 @@ const AuthForm = ({ type }: { type: string }) => {
                     <CustomInput control={form.control} name='address1' label='Address' placeholder='Enter your address'/>
                     <CustomInput control={form.control} name='city' label='City' placeholder='Enter your city'/>
                     <div className='flex gap-4'>
-                        <CustomInput control={form.control} name='county' label='County' placeholder='Example: Hertfordshire'/>
+                        <CustomInput control={form.control} name='state' label='State' placeholder='Example: Hertfordshire'/>
                         <CustomInput control={form.control} name='postalCode' label='Post code' placeholder='Example: PO16 7GZ'/>
                     </div>
 
@@ -120,11 +136,6 @@ const AuthForm = ({ type }: { type: string }) => {
                         <CustomInput control={form.control} name='dateOfBirth' label='Date of Birth' placeholder='DD-MM-YYYY'/>
                         <CustomInput control={form.control} name='ssn' label='SSN' placeholder='Example: 1234 '/>
                     </div>
-
-
-
-
-
 
                 </>
             )}
@@ -151,9 +162,11 @@ const AuthForm = ({ type }: { type: string }) => {
 
             </Link>
         </footer>
-      </>}
+      </>
+      )}
     </section>
   )
 }
+
 
 export default AuthForm

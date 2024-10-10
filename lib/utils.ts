@@ -80,8 +80,9 @@ export function formatAmount(amount: number): string {
 export const parseStringify = (value: any) => JSON.parse(JSON.stringify(value));
 
 export const removeSpecialCharacters = (value: string) => {
-  return value.replace(/[^\w\s]/gi, "");
+  return typeof value === 'string' ? value.replace(/[^\w\s]/gi, "") : "";
 };
+
 
 interface UrlQueryParams {
   params: string;
@@ -202,7 +203,7 @@ export const authformSchema = (type: string) => z.object({
   lastName: type === 'sign-in' ? z.string().optional() : z.string().min(3),
   address1: type === 'sign-in' ? z.string().optional() : z.string().max(50),
   city: type === 'sign-in' ? z.string().optional() : z.string().max(50),
-  county: type === 'sign-in' ? z.string().optional() : z.string().min(3),
+  state: type === 'sign-in' ? z.string().optional() : z.string().min(2).max(2),
   postalCode: type === 'sign-in' ? z.string().optional() : z.string().min(3).max(6),
   dateOfBirth: type === 'sign-in' ? z.string().optional (): z.string().min(3),
   ssn: type === 'sign-in' ? z.string().optional() : z.string().min(3),
